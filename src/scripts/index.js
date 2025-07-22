@@ -1,16 +1,15 @@
-
 function LoadDashboard(){
     if($.cookie('userid')){
         
         $.ajax({
         method: "get", 
-     url: '../../public/pages/user_dashboard.html',    
+        url: '../../public/pages/user_dashboard.html',    
         success: (response)=>{
              $("section").html(response);
              $("#lblUser").html($.cookie('userid'));
              $.ajax({
                  method:'get',
-                 url: `http://127.0.0.1:4040/appointments/${$.cookie('userid')}`,
+                 url: `https://todo-list-vxzi.onrender.com/appointments/${$.cookie('userid')}`,
                  success: (appointments=>{
                      appointments.map(appointment=>{
                           $(`<div class="alert alert-success alert-dismissible">
@@ -53,12 +52,10 @@ function LoadPage(page_name){
 $(function(){
     LoadPage("home.html");
 
-    //New User Button Click - on home
     $(document).on("click", "#btnNewUser",()=>{
         LoadPage("new_user.html");
     })
 
-    // Signin Button Click - on home
     $(document).on("click", "#btnSignin",()=>{
         LoadPage("user_login.html");
     })
@@ -67,9 +64,7 @@ $(function(){
         LoadPage("user_login.html");
     })
 
-    // Register Button Click - Post Data to Users
-
-     $(document).on("click", "#btnRegister",()=>{
+    $(document).on("click", "#btnRegister",()=>{
 
         var user = {
             user_id : $("#user_id").val(),
@@ -80,7 +75,7 @@ $(function(){
 
         $.ajax({
             method: "post",
-            url: `http://127.0.0.1:4040/register-user`,
+            url: `https://todo-list-vxzi.onrender.com/register-user`,
             data: user,
             success:()=>{
                 alert('User Registered');
@@ -88,8 +83,6 @@ $(function(){
         })
         LoadPage("user_login.html");
     })
-    
-    // Login Button - on login page
 
     $(document).on("click", "#btnLogin",()=>{
 
@@ -97,7 +90,7 @@ $(function(){
 
           $.ajax({
             method: 'get',
-            url: `http://127.0.0.1:4040/users/${user_id}`,
+            url: `https://todo-list-vxzi.onrender.com/users/${user_id}`,
             success: (userDetails)=>{
                  if(userDetails){
                      if($("#password").val()===userDetails.password){
@@ -114,13 +107,11 @@ $(function(){
 
     })
 
-    // Signout Logic
-
     $(document).on("click", "#btnSignout",()=>{
          $.removeCookie('userid');
          LoadPage('home.html');
     })
-    // New Appointment
+
     $(document).on("click", "#btnNewAppointment",()=>{
          LoadPage('add_appointment.html');
     })
@@ -128,8 +119,6 @@ $(function(){
     $(document).on("click", "#btnCancel",()=>{
          LoadPage('user_dashboard.html');
     })
-
-    // Add Appointment
 
     $(document).on("click", "#btnAdd", ()=>{
 
@@ -142,7 +131,7 @@ $(function(){
           }
           $.ajax({
             method:"post",
-            url: `http://127.0.0.1:4040/add-appointment`,
+            url: `https://todo-list-vxzi.onrender.com/add-appointment`,
             data: appointment
           })
           alert('Appointment Added');
@@ -150,14 +139,13 @@ $(function(){
 
     })
 
-    // Edit Click
     $(document).on("click", "#btnEdit",(e)=>{
 
           LoadPage("edit_appointment.html");
         
           $.ajax({
             method: "get", 
-            url: `http://127.0.0.1:4040/appointment/${e.target.value}`,
+            url: `https://todo-list-vxzi.onrender.com/appointment/${e.target.value}`,
             success: (appointment=>{
                    $("#appointment_id").val(appointment.appointment_id),
                    $("#title").val(appointment.title),
@@ -173,9 +161,6 @@ $(function(){
           LoadDashboard();
     })
 
-
-    // Save Click
-
     $(document).on("click", "#btnSave", (e)=>{
 
           var appointment = {
@@ -187,7 +172,7 @@ $(function(){
           }
           $.ajax({
             method:"put",
-            url: `http://127.0.0.1:4040/edit-appointment/${sessionStorage.getItem("appointment_id")}`,
+            url: `https://todo-list-vxzi.onrender.com/edit-appointment/${sessionStorage.getItem("appointment_id")}`,
             data: appointment
           })
           alert('Appointment Updated Successfully.');
@@ -195,15 +180,13 @@ $(function(){
 
     })
 
-    // Delete Click
-
      $(document).on("click", "#btnDelete",(e)=>{
 
           var choice = confirm('Are you sure? Want to Delete?');
           if(choice===true){
               $.ajax({
                     method: "delete", 
-                    url: `http://127.0.0.1:4040/delete-appointment/${e.target.value}`,
+                    url: `https://todo-list-vxzi.onrender.com/delete-appointment/${e.target.value}`,
                 })
                 alert('Appointment Deleted..');
                 LoadDashboard();
